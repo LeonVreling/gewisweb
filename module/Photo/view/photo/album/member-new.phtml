@@ -29,15 +29,6 @@ $this->scriptUrl()->requireUrl('member/search')
                     <?= $this->translate('Photos') ?>
                 </a>
             </li>
-            <li>
-                <?php
-                // determine association year
-                $associationYear = \Decision\Model\AssociationYear::fromDate($album->getStartDateTime());
-                ?>
-                <a href="<?= $this->url('photo/year', ['year' => $associationYear->getYear()]); ?>">
-                    <?= $associationYear->getYearString() ?>
-                </a>
-            </li>
             <?php
             // first we need to get all parents
             $crumbs = [];
@@ -61,7 +52,7 @@ $this->scriptUrl()->requireUrl('member/search')
                 </li>
             <?php endforeach; ?>
             <li class="active">
-                <?= $this->escapeHtml($album->getName()); ?>
+                <span class="fas fa-user"></span> <?= $this->escapeHtml($album->getName()); ?>
             </li>
         </ol>
     </div>
@@ -73,12 +64,16 @@ $this->scriptUrl()->requireUrl('member/search')
             <div class="col-lg-12">
                 <h1 class="page-header">
                     <?= $this->escapeHtml($album->getName()); ?>
-                    <small><?= $album->getStartDateTime()->format('d-m-Y') ?></small>
+                    <small>
+                        <a href="<?= $this->url('member/view', ['lidnr' => $album->getMember()->getLidnr()]) ?>">
+                            <?= strtolower($this->translate("View user profile")) ?>
+                        </a>
+                    </small>
                 </h1>
             </div>
         </div>
         <?php
-        $path = $this->url('photo/album', ['album_id' => $album->getId()]);
+        $path = $this->url('photo/member', ['lidnr' => $album->getMember()->getLidnr()]);
         ?>
         <?php if ($album->getAlbumCount() > 0): ?>
             <div class="row">
